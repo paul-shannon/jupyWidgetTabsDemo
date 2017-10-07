@@ -8,5 +8,5 @@
 __webpack_public_path__ = document.querySelector('body').getAttribute('data-base-url') + 'nbextensions/jupyWidgetTabsDemo/';
 
 // Export widget models and views, and the npm package version number.
-module.exports = require('./example.js');
+module.exports = require('./tabsdemo.js');
 module.exports['version'] = require('../package.json').version;

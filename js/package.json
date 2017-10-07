@@ -1,0 +1,35 @@
+{
+  "name": "jupyWidgetTabsDemo",
+  "version": "0.1.0",
+  "description": "jQuery tabs in a jupyter widget",
+  "author": "Paul Shannon",
+  "license": "(MIT OR Apache-2.0)",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paul-shannon/jupyWidgetTabsDemo.git"
+  },
+  "keywords": [
+    "jupyter",
+    "widgets",
+    "ipython",
+    "ipywidgets"
+  ],
+  "files": [
+    "lib/**/*.js",
+    "dist/*.js"
+  ],
+  "scripts": {
+    "clean": "rimraf dist/",
+    "prepublish": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "webpack": "^3.5.5",
+    "rimraf": "^2.6.1"
+  },
+  "dependencies": {
+    "@jupyter-widgets/base": "^1.0.0",
+    "lodash": "^4.17.4"
+  }
+}

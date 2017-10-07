@@ -6,6 +6,10 @@ jQuery tabs in a jupyter widget
 Installation
 ------------
 
+Simplest approach
+
+    bash> make
+
 To install use pip:
 
     $ pip install jupyWidgetTabsDemo

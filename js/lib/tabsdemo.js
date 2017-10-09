@@ -34,13 +34,22 @@ var TabsDemoModel = widgets.DOMWidgetModel.extend({
 var TabsDemoView = widgets.DOMWidgetView.extend({
 
    createDiv: function(){
-      var outerDiv = $("<div id='tabsOuterDiv' style='border:1px solid gray; height: 800px; width: 100%%'>my div</div>");
-      return(outerDiv);
+      var tabsOuterDiv = $("<div id='tabsOuterDiv' style='border:1px solid blue; height: 800px; width: 100%%'></div>");
+      var tabsList = $("<ul></ul>");
+      tabsList.append("<li><a href='#tabs_1'>1</a></li>");
+      tabsList.append("<li><a href='#tabs_2'>2</a></li>")
+      var tabDiv_1 = $("<div id='tabs_1'>tab one</div>");
+      var tabDiv_2 = $("<div id='tabs_2'>tab two</div>");
+      tabsOuterDiv.append(tabsList);
+      tabsOuterDiv.append(tabDiv_1);
+      tabsOuterDiv.append(tabDiv_2);
+      return(tabsOuterDiv);
       },
 
 
    render: function() {
       this.$el.append(this.createDiv());
+       setTimeout(function(){$("#tabsOuterDiv").tabs()}, 0);
       //this.value_changed();
       //this.model.on('change:value', this.value_changed, this);
       },

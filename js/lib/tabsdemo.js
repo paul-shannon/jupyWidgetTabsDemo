@@ -25,13 +25,16 @@ var TabsDemoModel = widgets.DOMWidgetModel.extend({
         _view_module : 'jupyWidgetTabsDemo',
         _model_module_version : '0.1.0',
         _view_module_version : '0.1.0',
-        value : 'TabsDemo World'
-    })
-});
+        msgFromKernel: "",
+        value : 'TabsDemo World',
+       })
+   }); // TabsDemoModel
 
 
 // Custom View. Renders the widget model.
 var TabsDemoView = widgets.DOMWidgetView.extend({
+
+    _requestCount: 0,
 
    createDiv: function(){
       var tabsOuterDiv = $("<div id='tabsOuterDiv' style='border:1px solid blue; height: 800px; width: 100%%'></div>");
@@ -47,20 +50,79 @@ var TabsDemoView = widgets.DOMWidgetView.extend({
       },
 
 
+   //--------------------------------------------------------------------------------
    render: function() {
       this.$el.append(this.createDiv());
        setTimeout(function(){$("#tabsOuterDiv").tabs()}, 0);
+       this.listenTo(this.model, 'change:msgFromKernel', this.dispatchRequest, this);
+
       //this.value_changed();
       //this.model.on('change:value', this.value_changed, this);
       },
 
     value_changed: function() {
        this.el.textContent = this.model.get('value');
-    }
-});
+       },
+
+    //--------------------------------------------------------------------------------
+    dispatchRequest: function(){
+
+       console.log(" === entering dispatchRequest, this is ");
+       console.log(this);
+       console.log("dispatchRequest, count: " + this._requestCount);
+
+       this._requestCount += 1;
+       window.requestCount = this._requestCount;
+
+       var msgRaw = this.model.get("msgFromKernel");
+       var msg = JSON.parse(msgRaw);
+       console.log(msg);
+       console.log("========================");
+       switch(msg.cmd){
+          case "writeToTab":
+             this.writeToTab(msg);
+             break;
+          case "raiseTab":
+              this.raiseTab(msg);
+              break;
+          default:
+              alert("dispatchRequest: unrecognized msg.cmd: " + msg.cmd);
+          } // switch
+       }, // dispatchRequest
+
+    //--------------------------------------------------------------------------------
+     writeToTab: function(msg){
+       var tabNumber = msg.payload.tabNumber;
+       var newContent = msg.payload.msg;
+       if(tabNumber == 1){
+           $("#tabs_1").text(newContent);
+           }
+        else if(tabNumber == 2){
+           $("#tabs_2").text(newContent);
+           }
+        }, // writeToTab
+
+     //--------------------------------------------------------------------------------
+     raiseTab: function(msg){
+        var tabName = msg.payload
+        switch(tabName){
+           case("1"):
+              $('a[href="#tabs_1"]').click();
+              break;
+           case("2"):
+              $('a[href="#tabs_2"]').click();
+              break;
+           default:
+              alert("raiseTab: no tab named " + tabName);
+           }
+        } // writeToTab
+     //--------------------------------------------------------------------------------
+
+
+   }); // TabsDemoView
 
 
 module.exports = {
-    TabsDemoModel : TabsDemoModel,
-    TabsDemoView : TabsDemoView
-};
+  TabsDemoModel : TabsDemoModel,
+  TabsDemoView : TabsDemoView
+  };

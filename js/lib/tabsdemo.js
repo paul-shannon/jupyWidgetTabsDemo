@@ -32,13 +32,21 @@ var TabsDemoModel = widgets.DOMWidgetModel.extend({
 
 // Custom View. Renders the widget model.
 var TabsDemoView = widgets.DOMWidgetView.extend({
-    render: function() {
-        this.value_changed();
-        this.model.on('change:value', this.value_changed, this);
-    },
+
+   createDiv: function(){
+      var outerDiv = $("<div id='tabsOuterDiv' style='border:1px solid gray; height: 800px; width: 100%%'>my div</div>");
+      return(outerDiv);
+      },
+
+
+   render: function() {
+      this.$el.append(this.createDiv());
+      //this.value_changed();
+      //this.model.on('change:value', this.value_changed, this);
+      },
 
     value_changed: function() {
-        this.el.textContent = this.model.get('value');
+       this.el.textContent = this.model.get('value');
     }
 });
 

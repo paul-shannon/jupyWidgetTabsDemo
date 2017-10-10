@@ -1,5 +1,6 @@
 import ipywidgets as widgets
-from traitlets import Unicode
+#from traitlets import Unicode
+from traitlets import Int, Unicode, Tuple, CInt, Dict, validate, observe
 import json
 
 @widgets.register
@@ -10,10 +11,10 @@ class TabsDemo(widgets.DOMWidget):
     _model_module = Unicode('jupyWidgetTabsDemo').tag(sync=True)
     _view_module_version = Unicode('^0.1.0').tag(sync=True)
     _model_module_version = Unicode('^0.1.0').tag(sync=True)
-    value = Unicode('TabsDemo World!').tag(sync=True)
-    _status = Unicode("").tag(sync=True);
+
     msgFromKernel = Unicode("").tag(sync=True)
-    msgFromBrowser = Unicode("").tag(sync=True)
+    _browserState = Unicode("").tag(sync=True)
+
 
     def writeToTab(self, tabNumber, msg):
        payload = {"tabNumber": tabNumber, "msg": msg};
@@ -22,7 +23,10 @@ class TabsDemo(widgets.DOMWidget):
     def raiseTab(self, tabName):
        self.msgFromKernel = json.dumps({"cmd": "raiseTab", "status": "request", "callback": "", "payload": tabName})
 
-    def getStatus(self):
-       return self._status;
+    def getBrowserState(self):
+        return(json.loads(self._browserState));
+
+    def getRequestCount(self):
+        return(self.getBrowserState()["requestCount"])
 
 

@@ -26,12 +26,10 @@ var TabsDemoModel = widgets.DOMWidgetModel.extend({
         _model_module_version : '0.1.0',
         _view_module_version : '0.1.0',
         msgFromKernel: "",
-        value : 'TabsDemo World',
-       })
+        })
    }); // TabsDemoModel
 
 
-// Custom View. Renders the widget model.
 var TabsDemoView = widgets.DOMWidgetView.extend({
 
     _requestCount: 0,
@@ -52,17 +50,19 @@ var TabsDemoView = widgets.DOMWidgetView.extend({
 
    //--------------------------------------------------------------------------------
    render: function() {
-      this.$el.append(this.createDiv());
-       setTimeout(function(){$("#tabsOuterDiv").tabs()}, 0);
-       this.listenTo(this.model, 'change:msgFromKernel', this.dispatchRequest, this);
 
-      //this.value_changed();
-      //this.model.on('change:value', this.value_changed, this);
+      this.$el.append(this.createDiv());
+      setTimeout(function(){$("#tabsOuterDiv").tabs()}, 0);
+      this.listenTo(this.model, 'change:msgFromKernel', this.dispatchRequest, this);
       },
 
-    value_changed: function() {
-       this.el.textContent = this.model.get('value');
-       },
+    //--------------------------------------------------------------------------------
+    updateStateToKernel: function(self, state){
+
+        var jsonString = JSON.stringify(state);
+        self.model.set("_browserState", jsonString);
+        self.touch();
+        },
 
     //--------------------------------------------------------------------------------
     dispatchRequest: function(){
@@ -70,6 +70,7 @@ var TabsDemoView = widgets.DOMWidgetView.extend({
        console.log(" === entering dispatchRequest, this is ");
        console.log(this);
        console.log("dispatchRequest, count: " + this._requestCount);
+       this.updateStateToKernel(this, {requestCount: this._requestCount});
 
        this._requestCount += 1;
        window.requestCount = this._requestCount;
@@ -117,7 +118,6 @@ var TabsDemoView = widgets.DOMWidgetView.extend({
            }
         } // writeToTab
      //--------------------------------------------------------------------------------
-
 
    }); // TabsDemoView
 
